@@ -163,3 +163,5 @@ flush privileges; -- to reload all properties
 show grants for bob;
 set default role all to bob;  -- to set group role
 
+
+

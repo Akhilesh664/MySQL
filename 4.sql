@@ -67,3 +67,64 @@ from (
     ) as xyz 
     where sal = 2;
 
+-- Co-related Subquery
+-- A correlated subquery is a subquery that contains a reference to a table that 
+-- 		also appears in the outer query. For example: SELECT * FROM t1 
+-- 		WHERE column1 = ANY (SELECT column1 FROM t2 WHERE t2.
+use employees;
+select  * from employees;
+select * from dept_emp;
+select * from titles;
+
+select emp_no, first_name
+from employees;
+
+-- by join (1 way)
+select from_date from dept_emp as d join employees 
+where d.emp_no = employees.emp_no;
+
+-- Co-Related Subquery (2 way)
+select emp_no, first_name, hire_date
+from employees where hire_date in
+	(select from_date from dept_emp 
+    where emp_no=employees.emp_no);
+
+
+-- Ques). Getting the employees first name, birth date, whose who are currently doing work as manager position 
+select * from employees;
+select * from titles;
+
+-- by join (1 way)
+select e.emp_no ,e.first_name, e.birth_date
+from employees as e join titles as t
+where (e.emp_no = t.emp_no) and title = "Manager";
+
+-- from corelated subquery (2 way)
+select emp_no, first_name, birth_date
+from employees where emp_no in
+	(select emp_no from titles
+    where emp_no = employees.emp_no and title="Manager");
+
+
+-- Ques). Getting emp_no, first_name for those employees where the hire_date employee is greater then the oldest date from from_date column 
+select * from employees;
+select * from titles;
+    
+SELECT emp_no, first_name, hire_date
+FROM employees
+WHERE hire_date > (
+    SELECT MIN(from_date)
+    FROM titles
+);
+
+-- Ques). Getting empno, firstname, last name, hire_date only for who is doinging work as 'assistant manager' and hiring date less then manager's hiring date
+select * from employees;
+select * from titles;
+
+select emp_no, first_name, last_name, hire_date
+from employees join titles using (emp_no)
+where title = 'Assistant Engineer'
+and hire_date < any 
+	(select hire_date from employees join titles
+	using (emp_no) where title = 'Manager');
+
