@@ -128,3 +128,77 @@ and hire_date < any
 	(select hire_date from employees join titles
 	using (emp_no) where title = 'Manager');
 
+
+-- Views [virtual table, secure, reusablity, simlifies]
+# view => data => quert store
+use sakila;
+
+create view actor_view as 
+select actor.actor_id, first_name,  film_id
+from actor join film_actor
+where actor.actor_id = film_actor.actor_id;
+
+select * from actor_view;
+
+-- getting actor, fil id, film actor find film id and the film it worked 
+select * from actor;
+select * from film;
+select * from film_actor;
+
+-- [create or replace view] search is same kind of name of view is presented or not if no make new view
+create or replace view aview as
+select a.actor_id, f.film_id, fm.title 
+from actor as a join film_actor as f
+join film fm
+where a.actor_id = f.actor_id and f.film_id = fm.film_id; 
+
+select * from aview;
+
+-- make md table student ,studentname insert 3 rows
+-- make select * view
+-- now try to update view is it possible 
+
+use employees;
+create table md (id int(5), name varchar(20));
+select * from md;
+insert into md values(1,"anil"),
+						(2,"amit"),
+						(3,"prem");
+
+create view md_view as
+select * from md;
+
+select * from md_view;
+UPDATE md_view
+SET name = "ankit"
+WHERE id = 1;
+
+select * from md_view;
+
+-- Ques). crete one view table on employees using group_by
+use employees;
+select * from employees;
+
+alter VIEW newtable AS
+SELECT 
+    gender, 
+    MIN(first_name) AS first_name
+FROM 
+    employees
+GROUP BY 
+    gender; 
+
+select * from newtable;
+
+
+-- [With Check Option] : complex view we cannot run ddl, dcl task where condition not fullfill
+create view v1 as 
+select * from employees
+where emp_no > 10005
+with check option; 
+
+select * from v1;
+update v1 set first_name = "abc" where emp_no = 10001;
+select * from v1;
+
+

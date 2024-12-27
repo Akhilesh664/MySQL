@@ -74,6 +74,8 @@ insert into test(name1) values("anushka");
 insert into test values(20,"ramesh");
 select * from test;  -- insert => DML operation
 
+
+
 -- update 
 update test set name1 = "pqr" where id = 10;
 select * from test;  -- update => DML operation [update all data values in table where id=10, if not given where it change complete table
