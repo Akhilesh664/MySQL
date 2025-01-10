@@ -194,7 +194,7 @@ INSERT INTO `products` (`product_id`,`product_name`,`price`) VALUES
  
 
  
--- find out the top 3 product_id based on quntity sold?
+-- 1) find out the top 3 product_id based on quntity sold?
 select * from order_lines;
 
 select product_id, sum(quantity) as Total_quantity
@@ -204,11 +204,18 @@ group by
 order by Total_quantity desc
 limit 3;
 
--- get order_date, product_id, product_name, order_id which has bessn sold in the multilple of 2?
+-- 2) get order_date, product_id, product_name, order_id which has bessn sold in the multilple of 2?
 select * from products;
 select * from orders;
 select * from order_lines;
 
+-- select o.order_date, ol.product_id, p.product_name, ol.order_id
+-- from order_lines ol
+-- join orders o on ol.order_id = o.id
+-- join products p on ol.product_id = p.product_id
+-- where ol.quantity % 2 = 0;
+
+-- OR
 select o.order_date, ol.product_id, prod.product_name, ol.order_id
 from orders as o 
 join order_lines ol 
@@ -218,63 +225,71 @@ join products as prod
 where (ol.quantity % 2 = 0);
 
 
--- get the brand name, order value, product_name for each product sold?
+
+-- 3) get the brand name, order value, product_name for each product sold?
 select * from brands;
 select * from orders;
 select * from products;
 select * from order_lines;
 
 select b.brand, o.order_value, p.product_name
-from  oreder_lines as ol
-join orders as o 
-	on ol.order_id = o_id
-join products as p
-	on p.product_id =  ol.product_id
-join brands as b
-on ol.product_id =  b.product_id;
+from order_lines ol
+join orders o on ol.order_id = o.id
+join products p on ol.product_id = p.product_id
+join brands b on p.product_id = b.product_id;
+
+-- select b.brand, o.order_value, p.product_name
+-- from  oreder_lines as ol
+-- join orders as o 
+-- 	on ol.order_id = o_id
+-- join products as p
+-- 	on p.product_id =  ol.product_id
+-- join brands as b
+-- on ol.product_id =  b.product_id;
 
 
--- get the avg orderValue for each order which has bear placed after half mn hour?
+
+-- 4) get the avg orderValue for each order which has bear placed after half mn hour?
 select * from order_lines;
 
-select avg(ord.order_value) as AverageOrderValue
-from orders ord
-where 
-	timestamp(minute, 
-				'2012-02-09 20:00:00', o.order_date) >= 30;
+select avg(o.order_value) as avg_order_value
+from orders o
+where timestampdiff(minute, '2012-02-09 20:00:00', o.order_date) > 30;
 
--- select avg(o.order_value) as avg_order_value
--- from orders o
--- where timestampdiff(minute, '2012-02-09 20:00:00', o.order_date) > 30;
+-- OR
+-- select avg(ord.order_value) as AverageOrderValue
+-- from orders ord
+-- where 
+-- 	timestamp(minute, 
+-- 				'2012-02-09 20:00:00', o.order_date) >= 30;
 
 
--- get the order_id the no. of quantities for each brand?
+-- 5) get the order_id the no. of quantities for each brand?
 select * from order_lines;
 select * from brands;
  
 select ol.order_id, sum(ol.quantity) as total_quantity, b.brand as brandName
 from order_lines ol
-join brands b 
-	on ol.product_id = b.product_id
-group by 
-	b.brand;
-
+JOIN products p 
+	ON ol.product_id = p.product_id
+JOIN brands b 
+	ON p.product_id = b.product_id
+GROUP BY ol.order_id,b.brand;
 
 -- select ol.order_id, sum(ol.quantity) as total_quantity, b.brand as brandName
 -- from order_lines ol
--- JOIN products p 
--- 	ON ol.product_id = p.product_id
--- JOIN brands b 
--- 	ON p.product_id = b.product_id
--- GROUP BY ol.order_id,b.brand;
+-- join brands b 
+-- 	on ol.product_id = b.product_id
+-- group by 
+-- 	b.brand;
 
 
--- =================
+-- ================= on SalesData imported from csv file 
 use demo_db;
-
 select * from salesdata;
 
--- Get all transactions done for the "Beauty" category in December
+-- 1) Get all transactions done for the "Beauty" category in December
+
 select *
 from salesdata
 where 
@@ -285,43 +300,114 @@ where
 		month(STR_TO_DATE(sales_date,'%m-%d-%Y'))=12;
 		
         
--- Get the total sales done for each category in each month
+-- 2) Get the total sales done for each category in each month
 select * from salesdata;
 
-select categoryProduct, month(sales_date) as month, year(sales_date) as year, sum(total_sale) as TotalSales
-FROM salesdata
-GROUP BY 
-	categoryProduct, year, month;
+-- select categoryProduct, month(sales_date) as month, year(sales_date) as year, sum(total_sale) as TotalSales
+-- FROM salesdata
+-- GROUP BY 
+-- 	categoryProduct, year, month;
 
+-- or
+SELECT categoryProduct, MONTH(STR_TO_DATE(sales_date, '%m/%d/%Y')) AS month, 
+       YEAR(STR_TO_DATE(sales_date, '%m/%d/%Y')) AS year, 
+       SUM(total_sale) AS total_sales
+FROM salesdata
+GROUP BY categoryProduct, year, month
+ORDER BY year, month;
 
 -- Find the maximum, minimum, and average age of people buying beauty products
 select * from salesdata;
 
-select max(year(curdate()) - year(age)) as maximumAge,
-min(year(curdate()) - year(age)) as minumumAge,
-avg(year(curdate()) - year(age)) as AverageAge
-from salesdata
-where categoryProduct = "Beauty";
+-- select max(year(curdate()) - year(age)) as maximumAge,
+-- min(year(curdate()) - year(age)) as minumumAge,
+-- avg(year(curdate()) - year(age)) as AverageAge
+-- from salesdata
+-- where categoryProduct = "Beauty";
 
+-- or
+SELECT MAX(YEAR(CURRENT_DATE) - YEAR(STR_TO_DATE(age, '%d-%m-%Y'))) AS max_age,
+       MIN(YEAR(CURRENT_DATE) - YEAR(STR_TO_DATE(age, '%d-%m-%Y'))) AS min_age,
+       AVG(YEAR(CURRENT_DATE) - YEAR(STR_TO_DATE(age, '%d-%m-%Y'))) AS avg_age
+FROM salesdata
+WHERE categoryProduct = 'Beauty';
 
--- Get the number of transactions done by each user in each category
+-- 4) Get the number of transactions done by each user in each category
 select * from salesdata;
 
-select categoryProduct, count(*) AS TotalTransaction
-from salesdata
-group by categoryProduct;
+-- select categoryProduct, count(*) AS TotalTransaction
+-- from salesdata
+-- group by categoryProduct;
 
--- Find the best-selling month for each year along with the average sales for each month
--- Get the top 3 and bottom 3 customers based on their average sales Get the top 3 and bottom 3 customers based on their average sales
+-- or
+SELECT customer_id, categoryProduct, COUNT(*) AS total_transactions
+FROM salesdata
+GROUP BY customer_id, categoryProduct
+ORDER BY customer_id;
 
+-- 5) Find the best-selling month for each year along with the average sales for each month
+select * from salesdata;
 
--- Get the number of unique customers who purchased products for each category
+WITH monthly_sales AS (
+    SELECT YEAR(STR_TO_DATE(sales_date, '%m/%d/%Y')) AS year, 
+           MONTH(STR_TO_DATE(sales_date, '%m/%d/%Y')) AS month,
+           SUM(total_sale) AS total_sales
+    FROM salesdata
+    GROUP BY year, month
+),
+average_sales AS (
+    SELECT year, month, AVG(total_sales) AS avg_monthly_sales
+    FROM monthly_sales
+    GROUP BY year, month
+)
+SELECT year, month, MAX(total_sales) AS best_selling_month, 
+       avg_monthly_sales
+FROM monthly_sales
+JOIN average_sales USING (year, month)
+GROUP BY year, month
+ORDER BY year, month;
+
+-- 6) Get the top 3 and bottom 3 customers based on their average sales Get the top 3 and bottom 3 customers based on their average sales
+select * from salesdata;
+
+WITH customer_sales AS (
+    SELECT customer_id, AVG(total_sale) AS avg_sales
+    FROM salesdata
+    GROUP BY customer_id
+)
+SELECT customer_id, avg_sales
+FROM customer_sales
+ORDER BY avg_sales DESC
+LIMIT 3
+UNION ALL
+SELECT customer_id, avg_sales
+FROM customer_sales
+ORDER BY avg_sales ASC
+LIMIT 3;
+
+-- 7) Get the number of unique customers who purchased products for each category
+select * from salesdata;
+
 select categoryProduct, count(distinct customer_id) as customrer
 from salesdata
 group by categoryProduct;
 
---  Count orders placed in different time slots
--- Orders placed from morning to 1 PM:
--- Orders placed during lunch time (1 PM to 3 PM):
--- Orders placed in the evening after 5 PM:
 
+-- 8) Count orders placed in different time slots
+-- i) Orders placed from morning to 1 PM:
+
+SELECT COUNT(*) AS morning_orders
+FROM salesdata
+WHERE TIME(STR_TO_DATE(time, '%H:%i:%s')) BETWEEN '00:00:00' AND '13:00:00';
+
+-- ii) Orders placed during lunch time (1 PM to 3 PM):
+
+SELECT COUNT(*) AS lunch_orders
+FROM salesdata
+WHERE TIME(STR_TO_DATE(time, '%H:%i:%s')) BETWEEN '13:00:00' AND '15:00:00';
+
+-- iii)Orders placed in the evening after 5 PM:
+
+SELECT COUNT(*) AS evening_orders
+FROM salesdata
+WHERE TIME(STR_TO_DATE(time, '%H:%i:%s')) >= '17:00:00';
