@@ -411,3 +411,6 @@ WHERE TIME(STR_TO_DATE(time, '%H:%i:%s')) BETWEEN '13:00:00' AND '15:00:00';
 SELECT COUNT(*) AS evening_orders
 FROM salesdata
 WHERE TIME(STR_TO_DATE(time, '%H:%i:%s')) >= '17:00:00';
+
+
+
