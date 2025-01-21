@@ -251,3 +251,77 @@ delimiter ;
 set @movie_count = 0;
 
 call GetTheActorMovieCount(23, @movie_count);
+
+
+
+
+-- ==================
+
+-- declare a cursor 
+-- open the cursor 
+-- process the data
+-- close a cursor
+use sakila;
+select * from actor;
+
+-- cursor
+
+DELIMITER $$
+create procedure create_email_list ()
+begin 
+	declare empname varchar(100) default "";
+	declare cur cursor for 
+    select first_name from actor where actor_id < 5;
+
+open cur;
+process_name: loop
+	fetch cur into empname;
+    select empname;
+end loop;
+
+close cur;
+select empname;
+
+end $$
+
+-- ==================
+
+DELIMITER //
+
+CREATE PROCEDURE GetAllActors()
+BEGIN
+    DECLARE done INT DEFAULT 0;
+    DECLARE actor_full_name VARCHAR(100);
+    DECLARE actor_cursor CURSOR FOR
+        SELECT CONCAT(first_name, ' ', last_name) AS full_name FROM actor;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    -- Open the cursor
+    OPEN actor_cursor;
+
+    -- Loop through the results
+    read_loop: LOOP
+        FETCH actor_cursor INTO actor_full_name;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        -- Output the actor's full name
+        SELECT actor_full_name;
+    END LOOP;
+
+    -- Close the cursor
+    CLOSE actor_cursor;
+END;
+//
+
+DELIMITER ; 
+
+
+CALL GetAllActors();
+
+
+
+drop procedure create_email_list;
+
+call create_email_list
+

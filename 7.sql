@@ -122,7 +122,7 @@ select * from Students;
 -- 				jump too data by help of index and as we know tree structure is efficient for searching anything
 -- 				it use to find data from large industry level data ocean beacause it is faster 
 
-
+ 
 -- 7 ===========
 -- rank() => used to give rank whenever there is same data then it skip rank. 
 -- 				and next rank after skip will be increaced by how many skip done
