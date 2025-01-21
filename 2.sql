@@ -11,6 +11,7 @@ insert into xyz values(2147483648); -- out of range
 select * from xyz;
 
 
+
 -- ddl statement (Data defination language)
 create table employee1(eid int unsigned); -- here we can increase the limit of value and in this we can not add negative value in it 
 insert into employee1 values(2147483648);
