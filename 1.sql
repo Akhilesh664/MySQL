@@ -7,6 +7,7 @@ select actor_id, first_name from actor;
 select actor_id, first_name,10, actor_id+10 from actor;
 select * from actor where actor_id = 10;
 
+
 -- like operator => pattern
 select * from actor where first_name ='ED';
 -- % 0 or more character
