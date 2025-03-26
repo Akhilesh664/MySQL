@@ -1,0 +1,687 @@
+ MySQL Mock Interview Questions and Answers
+
+
+Extras
+======
+a). Sequences of Execution: 
+From -> where -> group by -> having -> select -> order by -> limit 
+
+b). SQL is a programming language, while MySQL is an open-source database that uses SQL
+
+c). Relational databases use tables to organize data, while non-relational databases do not
+
+
+
+
+1. What is SQL?
+
+SQL (Structured Query Language) is a standard language used to interact with databases. It allows for creating, reading, updating, and deleting data within relational databases.
+
+======================================
+2. What are the types of SQL commands?
+
+DDL (Data Definition Language): CREATE, ALTER, DROP, TRUNCATE.
+
+DML (Data Manipulation Language): SELECT, INSERT, UPDATE, DELETE.
+
+DCL (Data Control Language): GRANT, REVOKE.
+
+TCL (Transaction Control Language): COMMIT, ROLLBACK, SAVEPOINT.
+
+======================================
+3. Difference between WHERE and HAVING?
+
+WHERE: Filters rows before grouping.
+
+HAVING: Filters groups after grouping.
+
+======================================
+4. What are aggregate functions in SQL?
+
+Aggregate functions perform calculations on multiple rows:
+
+SUM(), COUNT(), AVG(), MIN(), MAX().
+
+======================================
+5. What is a JOIN in SQL? Explain types of JOINs.
+
+JOIN combines rows from two or more tables based on a related column.
+
+INNER JOIN: Returns matching rows.
+
+LEFT JOIN: Returns all rows from the left table and matching rows from the right table.
+
+RIGHT JOIN: Returns all rows from the right table and matching rows from the left table.
+
+FULL JOIN: Returns rows when there is a match in either table.
+
+SELF JOIN: A table joins with itself.
+
+======================================
+6. What is a subquery? How to find the second highest salary using a subquery?
+
+SELECT MAX(salary) FROM employees WHERE salary < (SELECT MAX(salary) FROM employees);
+
+======================================
+7. What is a correlated subquery?
+
+A correlated subquery uses values from the outer query. Example:
+
+SELECT e1.salary FROM employees e1 WHERE e1.salary > (SELECT AVG(e2.salary) FROM employees e2 WHERE e1.department_id = e2.department_id);
+
+======================================
+8. Difference between DELETE, DROP, and TRUNCATE.
+
+DELETE: Removes specific rows; can use WHERE.
+
+DROP: Deletes the entire table/schema.
+
+TRUNCATE: Removes all rows but keeps the structure.
+
+======================================
+9. What is the difference between windows functions and GROUP BY?
+
+GROUP BY: Groups data and aggregates it into one row per group.
+
+Window Functions: Perform calculations across a set of rows related to the current row without collapsing rows.  Ex: Rank(), Dense_Rank(), Row_Number() 
+
+======================================
+10. Explain RANK(), DENSE_RANK(), and ROW_NUMBER().
+
+RANK(): Assigns a rank with gaps for ties.
+
+DENSE_RANK(): Assigns a rank without gaps for ties.
+
+ROW_NUMBER(): Assigns a unique number to each row.
+
+======================================
+11. What are LAG() and LEAD()?
+
+LAG(): Accesses data from the previous row.
+
+LEAD(): Accesses data from the next row.
+
+======================================
+12. What is a view?
+
+A virtual table based on the result of a SQL query. It simplifies complex queries and enhances security by restricting direct table access.
+
+======================================
+13. What is indexing? Why is it beneficial?
+
+Indexing improves query performance by allowing faster data retrieval. However, it may slow down data modification operations.
+
+======================================
+14. What are stored procedures?
+
+Precompiled SQL code that can be executed as a single unit to improve reusability and maintainability.
+
+======================================
+15. Difference between stored procedures and triggers.
+
+Stored Procedure: Manually invoked, can accept parameters.
+
+Trigger: Automatically executed in response to specific events.
+
+======================================
+16. What is normalization?
+
+Organizing data to reduce redundancy and improve data integrity. Common forms include 1NF, 2NF, 3NF, BCNF.
+
+======================================
+17. What is a primary key?
+
+A unique identifier for each record in a table. It does not allow NULL values.
+
+======================================
+18. What is a foreign key?
+
+A column that creates a relationship between two tables by referencing the primary key of another table.
+
+======================================
+19. Difference between UNION and UNION ALL.
+
+UNION: Removes duplicates.
+
+UNION ALL: Includes duplicates.
+
+======================================
+20. Explain the concept of a composite key.
+
+A key composed of two or more columns to uniquely identify rows.
+
+======================================
+21. What is a unique key?
+
+A constraint that ensures all values in a column are distinct but allows one NULL.
+
+======================================
+22. Difference between IN and EXISTS.
+
+IN: Checks values in a given list.
+
+EXISTS: Checks for the existence of a subquery result.
+
+======================================
+23. What is a clustered index?
+
+An index that sorts and stores data rows in the table based on key values.
+
+======================================
+24. What is a non-clustered index?
+
+An index with a separate structure from the data rows, pointing to their location.
+
+======================================
+25. Explain the ACID properties.
+
+Atomicity, Consistency, Isolation, Durability: Ensure reliable transactions.
+
+======================================
+26. How do you handle NULL values in SQL?
+
+Use IS NULL or IS NOT NULL to filter them.
+
+======================================
+27. Explain the CASE statement in SQL.
+
+A conditional expression to return specific values based on conditions.
+
+======================================
+28. What is the difference between a database and a schema?
+
+Database: Collection of data.
+
+Schema: Logical structure of the database.
+
+======================================
+29. What is a cursor in SQL?
+
+A database object to retrieve one row at a time from a result set.
+
+======================================
+30. Explain the use of the HAVING clause.
+
+Filters groups after aggregation.
+
+======================================
+31. What is a transaction?
+
+A sequence of SQL operations treated as a single unit.
+
+======================================
+32. What is the difference between COUNT(*) and COUNT(column)?
+
+COUNT(*): Includes NULLs.
+
+COUNT(column): Excludes NULLs.
+
+======================================
+33. How does DISTINCT work in SQL?
+
+Removes duplicate rows in the result set.
+
+======================================
+34. How do you delete duplicate rows in SQL?
+
+DELETE FROM table_name WHERE id NOT IN (SELECT MIN(id) FROM table_name GROUP BY column1, column2);
+
+======================================
+35. What is the difference between CHAR and VARCHAR?
+
+CHAR: Fixed length.
+
+VARCHAR: Variable length.
+
+======================================
+36. Explain the COALESCE function.
+
+Returns the first non-NULL value from the list.
+
+======================================
+37. How do you use CASE with aggregate functions?
+
+SELECT SUM(CASE WHEN condition THEN value ELSE 0 END) FROM table_name;
+
+======================================
+38. What are common table expressions (CTEs)?
+
+Temporary result sets defined within a SQL statement using WITH.
+
+======================================
+39. How do you optimize a slow query in SQL?
+
+Use indexes, avoid SELECT *, optimize joins, and review the execution plan.
+
+======================================
+40. What is an execution plan?
+
+A visual representation of how SQL executes a query.
+
+======================================
+41. Explain the difference between INNER JOIN and OUTER JOIN.
+
+INNER JOIN: Only matching rows.
+
+OUTER JOIN: Includes unmatched rows.
+
+======================================
+42. What is a materialized view?
+
+A view that stores the query result physically.
+
+======================================
+43. How do you perform pagination in SQL?
+
+SELECT * FROM table_name LIMIT offset, row_count;
+
+======================================
+44. Explain the concept of data integrity.
+
+Ensures accuracy and consistency of data.
+
+======================================
+45. What is a cross join?
+
+Produces a Cartesian product of two tables.
+
+======================================
+46. How do you implement recursion in SQL?
+
+Use recursive CTEs with WITH RECURSIVE.
+
+======================================
+47. What is an alias in SQL?
+
+A temporary name for a column or table.
+
+======================================
+48. How do you find the nth highest salary?
+
+SELECT DISTINCT salary FROM employees ORDER BY salary DESC LIMIT n-1, 1;
+
+======================================
+49. What is a partitioned table?
+
+A table divided into partitions to improve performance.
+
+======================================
+50. Explain the difference between SQL and NoSQL.
+
+SQL: Relational, structured schema.
+
+NoSQL: Non-relational, flexible schema.
+
+========================================================================================================================================================
+========================================================================================================================================================
+
+MYSQL Topics-wise Examples
+==========================
+
+Create,Insert,Update,Delete
+PK, FK, Check, Unique, Not Null
+Alter,Truncate,Drop
+Grant, Revoke, 
+Rollback, Commit , Save Point
+Auto Increment
+Copying Table with data
+Copying Structure
+Where 
+OR, AND
+IN, NOT IN
+NULL, NOT NULL
+BETWEEN
+DISTINCT
+InBuilt Functions - Min, Max, Count, Average
+Order By
+Like using % , _
+Limit
+Group By
+Joins
+Subquery/Nested query
+Exists / Not Exists
+Union, Intersection, Minus
+View
+Temporary Table
+Index
+Function
+Procedure
+Exception Handling
+Loops - While Do, Repeat, Loop, Cursor
+Trigger
+write examples on above all topic on sql 
+Here's a comprehensive example for each SQL topic you've listed:
+
+
+Examples:
+==============================================================================================================================
+
+1. Create, Insert, Update, Delete
+
+-- Create a table
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100),
+    Department VARCHAR(50),
+    Salary DECIMAL(10, 2)
+);
+
+-- Insert data
+INSERT INTO Employees (Name, Department, Salary)
+VALUES 
+('John Doe', 'HR', 50000), 
+('Jane Smith', 'IT', 70000);
+
+-- Update data
+UPDATE Employees
+SET Salary = 75000
+WHERE Name = 'Jane Smith';
+
+-- Delete data
+DELETE FROM Employees
+WHERE Name = 'John Doe';
+
+===============================================================
+
+2. Constraints: PK, FK, Check, Unique, Not Null
+
+CREATE TABLE Orders (
+    OrderID INT PRIMARY KEY,
+    ProductID INT NOT NULL,
+    CustomerID INT,
+    Quantity INT CHECK (Quantity > 0),
+    UNIQUE (ProductID, CustomerID)
+);
+
+CREATE TABLE Products (
+    ProductID INT PRIMARY KEY,
+    ProductName VARCHAR(100),
+    FOREIGN KEY (ProductID) REFERENCES Orders(ProductID)
+);
+
+===============================================================
+
+3. Alter, Truncate, Drop
+
+-- Alter table: add column
+ALTER TABLE Employees ADD Email VARCHAR(100);
+
+-- Truncate table
+TRUNCATE TABLE Orders;
+
+-- Drop table
+DROP TABLE Products;
+
+===============================================================
+
+4. Grant, Revoke
+
+-- Grant privileges
+GRANT SELECT, INSERT ON Employees TO 'user1'@'localhost';
+
+-- Revoke privileges
+REVOKE INSERT ON Employees FROM 'user1'@'localhost';
+
+===============================================================
+
+5. Rollback, Commit, Save Point
+
+START TRANSACTION;
+
+-- Insert into table
+INSERT INTO Employees (Name, Department, Salary) VALUES ('Mark Lee', 'Finance', 60000);
+SAVEPOINT savepoint1;
+
+-- Update table
+UPDATE Employees SET Salary = 65000 WHERE Name = 'Mark Lee';
+
+-- Rollback to savepoint
+ROLLBACK TO savepoint1;
+
+-- Commit transaction
+COMMIT;
+
+===============================================================
+
+6. Auto Increment
+
+CREATE TABLE Students (
+    StudentID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(100),
+    Age INT
+);
+
+===============================================================
+
+7. Copying Table with Data
+
+CREATE TABLE EmployeesBackup AS
+SELECT * FROM Employees;
+
+===============================================================
+
+8. Copying Structure Only
+
+CREATE TABLE EmployeesStructure AS
+SELECT * FROM Employees WHERE 1=0;
+
+===============================================================
+
+9. Where
+
+SELECT * FROM Employees
+WHERE Department = 'IT';
+
+===============================================================
+
+10. OR, AND
+
+SELECT * FROM Employees
+WHERE Department = 'IT' AND Salary > 60000
+   OR Department = 'HR';
+
+===============================================================
+
+11. IN, NOT IN
+
+SELECT * FROM Employees
+WHERE Department IN ('IT', 'HR');
+
+SELECT * FROM Employees
+WHERE Department NOT IN ('IT', 'HR');
+
+===============================================================
+
+12. NULL, NOT NULL
+
+SELECT * FROM Employees
+WHERE Email IS NULL;
+
+SELECT * FROM Employees
+WHERE Email IS NOT NULL;
+
+===============================================================
+
+13. BETWEEN
+
+SELECT * FROM Employees
+WHERE Salary BETWEEN 50000 AND 80000;
+
+===============================================================
+
+14. DISTINCT
+
+SELECT DISTINCT Department
+FROM Employees;
+
+===============================================================
+
+15. InBuilt Functions
+
+SELECT MIN(Salary), MAX(Salary), AVG(Salary), COUNT(*) AS TotalEmployees
+FROM Employees;
+
+===============================================================
+
+16. Order By
+
+SELECT * FROM Employees
+ORDER BY Salary DESC;
+
+===============================================================
+
+17. LIKE using % and _
+
+SELECT * FROM Employees
+WHERE Name LIKE 'J%'; -- Starts with J
+
+SELECT * FROM Employees
+WHERE Name LIKE '_a%'; -- Second character is 'a'
+
+===============================================================
+
+18. Limit
+
+SELECT * FROM Employees
+LIMIT 2;
+
+===============================================================
+
+19. Group By
+
+SELECT Department, COUNT(*) AS TotalEmployees
+FROM Employees
+GROUP BY Department;
+
+===============================================================
+
+20. Joins
+
+-- Inner Join
+SELECT e.Name, o.OrderID
+FROM Employees e
+INNER JOIN Orders o ON e.EmployeeID = o.CustomerID;
+
+-- Left Join
+SELECT e.Name, o.OrderID
+FROM Employees e
+LEFT JOIN Orders o ON e.EmployeeID = o.CustomerID;
+
+===============================================================
+
+21. Subquery/Nested Query
+
+SELECT * FROM Employees
+WHERE Salary > (SELECT AVG(Salary) FROM Employees);
+
+===============================================================
+
+22. Exists / Not Exists
+
+SELECT * FROM Employees e
+WHERE EXISTS (
+    SELECT 1 FROM Orders o WHERE e.EmployeeID = o.CustomerID
+);
+
+SELECT * FROM Employees e
+WHERE NOT EXISTS (
+    SELECT 1 FROM Orders o WHERE e.EmployeeID = o.CustomerID
+);
+
+===============================================================
+
+23. Union, Intersection, Minus
+
+-- Union
+SELECT Name FROM Employees
+UNION
+SELECT ProductName FROM Products;
+
+-- Intersection (Not directly supported, emulate using JOIN)
+SELECT e.Name FROM Employees e
+INNER JOIN Products p ON e.Name = p.ProductName;
+
+-- Minus (Not directly supported, emulate using NOT IN)
+SELECT Name FROM Employees
+WHERE Name NOT IN (SELECT ProductName FROM Products);
+
+===============================================================
+
+24. View
+
+CREATE VIEW EmployeeDetails AS
+SELECT Name, Department, Salary
+FROM Employees;
+
+===============================================================
+
+25. Temporary Table
+
+CREATE TEMPORARY TABLE TempEmployees AS
+SELECT * FROM Employees;
+
+===============================================================
+
+
+26. Index
+
+CREATE INDEX idx_department ON Employees (Department);
+
+===============================================================
+
+27. Function
+
+CREATE FUNCTION GetEmployeeSalary(emp_id INT)
+RETURNS DECIMAL(10, 2)
+BEGIN
+    DECLARE emp_salary DECIMAL(10, 2);
+    SELECT Salary INTO emp_salary FROM Employees WHERE EmployeeID = emp_id;
+    RETURN emp_salary;
+END;
+
+===============================================================
+
+28. Procedure
+
+CREATE PROCEDURE UpdateSalary(emp_id INT, new_salary DECIMAL(10, 2))
+BEGIN
+    UPDATE Employees SET Salary = new_salary WHERE EmployeeID = emp_id;
+END;
+
+===============================================================
+
+29. Exception Handling
+
+DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+BEGIN
+    ROLLBACK;
+END;
+
+===============================================================
+
+30. Loops
+
+-- While Loop
+WHILE @counter <= 10 DO
+    SET @counter = @counter + 1;
+END WHILE;
+
+-- Cursor Example
+DECLARE emp_cursor CURSOR FOR
+SELECT Name FROM Employees;
+
+===============================================================
+
+31. Trigger
+
+CREATE TRIGGER AfterInsert
+AFTER INSERT ON Employees
+FOR EACH ROW
+BEGIN
+    INSERT INTO Logs (Description) VALUES ('New employee added');
+END;
+
+
+
+
+
